@@ -32,5 +32,17 @@ $ sudo certbot renew --dry-run
 ```sh
 $ sudo crontab -e
 
-0 3 1 * * certbot renew --renew-hook "sudo nginx -s reload"
+0 3 1 * * certbot renew --renew-hook "nginx -s reload"
+```
+
+### nginx config
+```sh
+location / {
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    if ($http_upgrade = "websocket") {
+            proxy_pass http://127.0.0.1:3000;
+    }
+}
 ```
